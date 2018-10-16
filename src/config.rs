@@ -1801,8 +1801,21 @@ pub struct Font {
     #[serde(default="true_bool", deserialize_with = "default_true_bool")]
     use_thin_strokes: bool,
 
-    #[serde(default="true_bool", deserialize_with = "default_true_bool")]
-    scale_with_dpi: bool,
+    // TODO: Deprecated
+    #[serde(default, deserialize_with = "deserialize_scale_with_dpi")]
+    scale_with_dpi: Option<()>,
+}
+
+fn deserialize_scale_with_dpi<'a, D>(deserializer: D) -> ::std::result::Result<Option<()>, D::Error>
+    where D: de::Deserializer<'a>
+{
+    // This is necessary in order to get serde to complete deserialization of the configuration
+    let _ignored = bool::deserialize(deserializer);
+    eprintln!("{}",
+        Yellow("The `scale_with_dpi` setting has been removed, \
+                on X11 the WINIT_HIDPI_FACTOR environment variable can be used instead.")
+    );
+    Ok(None)
 }
 
 fn default_bold_desc() -> FontDescription {
@@ -1855,11 +1868,6 @@ impl Font {
             .. self
         }
     }
-
-    /// Check whether dpi should be applied
-    pub fn scale_with_dpi(&self) -> bool {
-        self.scale_with_dpi
-    }
 }
 
 #[cfg(target_os = "macos")]
@@ -1871,7 +1879,7 @@ impl Default for Font {
             italic: FontDescription::new_with_family("Menlo"),
             size: Size::new(11.0),
             use_thin_strokes: true,
-            scale_with_dpi: true,
+            scale_with_dpi: None,
             glyph_offset: Default::default(),
             offset: Default::default(),
         }
@@ -1887,7 +1895,7 @@ impl Default for Font {
             italic: FontDescription::new_with_family("monospace"),
             size: Size::new(11.0),
             use_thin_strokes: false,
-            scale_with_dpi: true,
+            scale_with_dpi: None,
             glyph_offset: Default::default(),
             offset: Default::default(),
         }
@@ -2119,7 +2127,6 @@ enum Key {
     LAlt,
     LBracket,
     LControl,
-    LMenu,
     LShift,
     LWin,
     Mail,
@@ -2144,7 +2151,6 @@ enum Key {
     RAlt,
     RBracket,
     RControl,
-    RMenu,
     RShift,
     RWin,
     Semicolon,
@@ -2280,7 +2286,6 @@ impl Key {
             Key::LAlt => LAlt,
             Key::LBracket => LBracket,
             Key::LControl => LControl,
-            Key::LMenu => LMenu,
             Key::LShift => LShift,
             Key::LWin => LWin,
             Key::Mail => Mail,
@@ -2305,7 +2310,6 @@ impl Key {
             Key::RAlt => RAlt,
             Key::RBracket => RBracket,
             Key::RControl => RControl,
-            Key::RMenu => RMenu,
             Key::RShift => RShift,
             Key::RWin => RWin,
             Key::Semicolon => Semicolon,

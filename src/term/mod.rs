@@ -786,6 +786,10 @@ pub struct SizeInfo {
 
     /// Horizontal window padding
     pub padding_y: f32,
+
+    /// DPI factor of the current window
+    #[serde(default)]
+    pub dpr: f64,
 }
 
 impl SizeInfo {
@@ -2017,6 +2021,7 @@ mod tests {
             cell_height: 3.0,
             padding_x: 0.0,
             padding_y: 0.0,
+            dpr: 1.0,
         };
         let mut term = Term::new(&Default::default(), size);
         let mut grid: Grid<Cell> = Grid::new(Line(3), Column(5), 0, Cell::default());
@@ -2060,6 +2065,7 @@ mod tests {
             cell_height: 3.0,
             padding_x: 0.0,
             padding_y: 0.0,
+            dpr: 1.0,
         };
         let mut term = Term::new(&Default::default(), size);
         let mut grid: Grid<Cell> = Grid::new(Line(1), Column(5), 0, Cell::default());
@@ -2129,6 +2135,7 @@ mod tests {
             cell_height: 3.0,
             padding_x: 0.0,
             padding_y: 0.0,
+            dpr: 1.0,
         };
         let mut term = Term::new(&Default::default(), size);
         let cursor = Point::new(Line(0), Column(0));
@@ -2147,6 +2154,7 @@ mod tests {
             cell_height: 3.0,
             padding_x: 0.0,
             padding_y: 0.0,
+            dpr: 1.0,
         };
         let config: Config = Default::default();
         let mut term: Term = Term::new(&config, size);
@@ -2175,6 +2183,7 @@ mod tests {
             cell_height: 3.0,
             padding_x: 0.0,
             padding_y: 0.0,
+            dpr: 1.0,
         };
         let config: Config = Default::default();
         let mut term: Term = Term::new(&config, size);
@@ -2194,6 +2203,7 @@ mod tests {
             cell_height: 3.0,
             padding_x: 0.0,
             padding_y: 0.0,
+            dpr: 1.0,
         };
         let config: Config = Default::default();
         let mut term: Term = Term::new(&config, size);
@@ -2214,6 +2224,7 @@ mod tests {
             cell_height: 3.0,
             padding_x: 0.0,
             padding_y: 0.0,
+            dpr: 1.0
         };
         let config: Config = Default::default();
         let mut term: Term = Term::new(&config, size);
